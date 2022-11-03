@@ -1,0 +1,3 @@
+class Loading {
+  String loading = '';
+}
