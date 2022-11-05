@@ -83,7 +83,7 @@ class _homestuState extends State<HomeStudent> {
             icon: const Icon(Icons.logout),
           )
         ],
-        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
         backgroundColor: Colors.white,
         title: Text(
           name!,
@@ -139,7 +139,7 @@ class _homestuState extends State<HomeStudent> {
                   ),
                ],
              ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
