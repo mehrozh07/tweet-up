@@ -1,9 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tweetup_fyp/screens/authenticate/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tweetup_fyp/services/drawer.dart';
 import '../../constants/constants.dart';
 import 'create_class.dart';
 import 'created_classes.dart';
@@ -19,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  int _index = 0;
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
@@ -34,52 +33,26 @@ class _HomeState extends State<Home> {
         MediaQuery.of(context).size.height - AppBar().preferredSize.height;
     final String? name = user != null ? user.displayName : 'Name';
     return Scaffold(
-      // drawer: CustomDrawer(),
+      drawer: CustomDrawer(),
       appBar: AppBar(
         elevation: 0,
         actions: [
           IconButton(
             onPressed: () async {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO_REVERSED,
-                borderSide: const BorderSide(
-                  color: Colors.green,
-                  width: 2,
-                ),
-                width: 350,
-                buttonsBorderRadius: const BorderRadius.all(
-                  Radius.circular(2),
-                ),
-                dismissOnTouchOutside: true,
-                dismissOnBackKeyPress: false,
-                onDismissCallback: (type) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Dismissed'),
-                    ),
-                  );
-                },
-                headerAnimationLoop: false,
-                animType: AnimType.BOTTOMSLIDE,
-                title: 'INFO',
-                desc: 'Do You Want to Log Out?',
-                showCloseIcon: true,
-                btnCancelOnPress: () {
-                },
-                btnOkOnPress: () {
-                  _auth.signOut();
-                  Navigator.pushReplacementNamed(context, LoginScreen.id);
-                },
-              ).show();
             },
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout,),
           )
         ],
-        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
-        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: true,
         title: Text(
-          style: TextStyle(color: Theme.of(context).accentColor), name!,
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              color: Colors.white,
+            )
+          ),
+          name!,
         ),
       ),
       body: SingleChildScrollView(
@@ -89,33 +62,6 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(8.0),
               child: UserInfo(imgURL: imgURL, user: user),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         'TEACHER SECTION',
-            //         textAlign: TextAlign.start,
-            //         style: GoogleFonts.questrial(
-            //           fontSize: 20.0,
-            //           fontWeight: FontWeight.w900,
-            //           color: const Color.fromRGBO(20, 33, 61, 1),
-            //           wordSpacing: 2.5,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
-            // Padding(
-            //   padding:  EdgeInsets.symmetric(horizontal: 28.w),
-            //   child: const Divider(),
-            // ),
-            //
-            // SizedBox(
-            //   height: 20.h,
-            // ),
             Text(
               'Teacher\'s section',textAlign: TextAlign.start,
               style: kPageTitleStyleBlack,
@@ -130,8 +76,8 @@ class _HomeState extends State<Home> {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(30),
-                    decoration:  const BoxDecoration(
-                        boxShadow: [
+                    decoration:  BoxDecoration(
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.blueAccent,
                             blurRadius: 10, // soften the shadow
@@ -142,8 +88,8 @@ class _HomeState extends State<Home> {
                             ),
                           )
                         ],
-                        color:  Colors.blueAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                        color:  Theme.of(context).primaryColor,
+                        borderRadius: const BorderRadius.all(Radius.circular(20))),
                     height: 180,
                     width: MediaQuery.of(context).size.width/2.3,
                     child: Text(
@@ -193,7 +139,7 @@ class _HomeState extends State<Home> {
 }
 
 class UserInfo extends StatefulWidget {
-     UserInfo({
+     const UserInfo({super.key,
     required this.imgURL,
     required this.user,
   }) ;
@@ -212,19 +158,19 @@ class _UserInfoState extends State<UserInfo> {
 
     @override
   Widget build(BuildContext context) {
-    final User? usser = _auth1.currentUser;
-    final userUid = usser?.uid;
+    final User? user = _auth1.currentUser;
+    final userUid = user?.uid;
     return Stack(
       children: [
         Container(
           height: 250,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: const Color(0xFF687daf),
+            color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(18),
           ),
         ),
-        SizedBox(height: 8,),
+        const SizedBox(height: 8,),
         Container(
           padding:  const EdgeInsets.symmetric(
               horizontal: 10,
@@ -234,14 +180,14 @@ class _UserInfoState extends State<UserInfo> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
+               CircleAvatar(
                 maxRadius: 50,
                 backgroundColor: Colors.white,
-                backgroundImage:  NetworkImage(""),
+                backgroundImage:  NetworkImage(widget.imgURL),
               ),
               const SizedBox(width: 20,),
               Padding(
-                padding:  EdgeInsets.symmetric(vertical: 20,),
+                padding:  const EdgeInsets.symmetric(vertical: 20,),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +205,7 @@ class _UserInfoState extends State<UserInfo> {
           ),
         ),
         Padding(
-          padding:  EdgeInsets.symmetric(vertical: 160, horizontal: 20),
+          padding:  const EdgeInsets.symmetric(vertical: 160, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,40 +250,6 @@ class _UserInfoState extends State<UserInfo> {
           ),
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     Padding(
-        //       padding:
-        //           const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
-        //       child: Container(
-        //           width: 50.0,
-        //           height: 50.0,
-        //           decoration:  BoxDecoration(
-        //               shape: BoxShape.circle,
-        //               image:  DecorationImage(
-        //                   fit: BoxFit.fill, image:  NetworkImage(imgURL)))),
-        //     ),
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(vertical: 5),
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Text(user!.displayName!,
-        //               style:
-        //                   GoogleFonts.questrial(fontWeight: FontWeight.bold)),
-        //           Text(user!.email!,
-        //               style:
-        //                   GoogleFonts.questrial(fontWeight: FontWeight.w100)),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 28),
-        //   child: Divider(),
-        // ),
       ],
     );
   }

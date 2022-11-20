@@ -27,7 +27,7 @@ class _CreateClassState extends State<CreateClass> {
   final professorName = TextEditingController();
 
   final batch = TextEditingController();
-      var code;
+      String code = '';
   bool _loading = false, created = false;
   String msg = ' ';
   ErrorMsg err = ErrorMsg(' ');
@@ -43,11 +43,12 @@ class _CreateClassState extends State<CreateClass> {
         : Scaffold(
             // drawer: CustomDrawer(),
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Theme.of(context).accentColor),
-              backgroundColor: Colors.white,
-              title: Text(
+              iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+              backgroundColor: Theme.of(context).primaryColor,
+              centerTitle: true,
+              title: const Text(
                 'Create class',
-                style: TextStyle(color: Theme.of(context).accentColor),
+                style: TextStyle(color: Colors.white),
               ),
             ),
             body: SingleChildScrollView(
@@ -60,13 +61,13 @@ class _CreateClassState extends State<CreateClass> {
                       child: Column(
                         children: [
                           formField(context, subjectName, 'Name of subject'),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           formField(
                               context, professorName, 'Name of professor'),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           formField(context, batch, 'Semester/class'),
                           Padding(
-                            padding:  EdgeInsets.only(top: 20),
+                            padding:  const EdgeInsets.only(top: 20),
                             child: Text(
                               msg,
                               style: GoogleFonts.roboto(fontSize: 15),
@@ -77,7 +78,7 @@ class _CreateClassState extends State<CreateClass> {
                             width: MediaQuery.of(context).size.width * 0.8,
                             child: Material(
                               borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Theme.of(context).accentColor,
+                              shadowColor: Theme.of(context).colorScheme.secondary,
                               color: Theme.of(context).accentColor,
                               child: Builder(builder: (context) {
                                 return TextButton(
@@ -167,8 +168,11 @@ class _CreateClassState extends State<CreateClass> {
       controller: controller,
       decoration: InputDecoration(
           labelText: hint,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).primaryColor)
+          ),
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).accentColor))),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor))),
     );
   }
 }
@@ -180,33 +184,31 @@ class CopyCode extends StatelessWidget {
   }) ;
 
   final bool created;
-  final String code;
-  Utils _utils = Utils();
+  final String? code;
+  final Utils _utils = Utils();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Container(
-        child: Column(
-          children: [
-            const Text(
-                'Copy the following code and send to your students, so they can join your class'),
-            TextButton(
-              onPressed: created
-                  ? () async {
-                      ClipboardData data = ClipboardData(text: (code));
-                      await Clipboard.setData(data);
-                      if (kDebugMode) {
-                        print(code);
-                      }
-                    _utils.flushBarErrorMessage('code copied', context);
+      child: Column(
+        children: [
+          const Text(
+              'Copy the following code and send to your students, so they can join your class'),
+          TextButton(
+            onPressed: created
+                ? () async {
+                    ClipboardData data = ClipboardData(text: (code));
+                    await Clipboard.setData(data);
+                    if (kDebugMode) {
+                      print(code);
                     }
-                  : null,
-              child: const Text('Copy'),
-            ),
-          ],
-        ),
+                  _utils.flushBarErrorMessage('code copied', context);
+                  }
+                : null,
+            child: const Text('Copy'),
+          ),
+        ],
       ),
     );
   }

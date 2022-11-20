@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/home_meeting_button.dart';
 
 class Role extends StatefulWidget {
   static const routeName = '/role';
@@ -15,8 +14,6 @@ class Role extends StatefulWidget {
 }
 
 class _roleState extends State<Role> {
-  // final _auth = AuthService();
-  // int _index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,12 @@ class _roleState extends State<Role> {
     final name = user != null ? user.displayName : 'Name';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tweet Up'),
+        title: Text('Tweet Up',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              color: Colors.white,
+            )
+          ),),
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: buttonColor,
@@ -36,30 +38,49 @@ class _roleState extends State<Role> {
             children: <Widget>[
         Padding(
           padding:  const EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              HomeMeetingButton(
-                onPressed: (){},
-                text: 'New Meeting',
-                icon: Icons.videocam,
-              ),
-              HomeMeetingButton(
-                onPressed: (){},
-                text: 'Join Meeting',
-                icon: Icons.add_box_rounded,
-              ),
-              HomeMeetingButton(
-                onPressed: () {},
-                text: 'Schedule',
-                icon: Icons.calendar_today,
-              ),
-              HomeMeetingButton(
-                onPressed: () {},
-                text: 'Share Screen',
-                icon: Icons.arrow_upward_rounded,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                      onPressed: (){},
+                      child: Text('New Meeting',
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )
+                      ),),
+                  ),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    onPressed: (){},
+                    child: Text('Join with a code',
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w600,
+                          )
+                      ),),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const Padding(
@@ -79,52 +100,37 @@ class _roleState extends State<Role> {
                 height: size.height*0.50,
                 child: Image.asset("assets/images/image1.jpg"),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height*0.001,),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
               Padding(
                 padding: const EdgeInsets.only(right: 12, left: 12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        child: ElevatedButton(
-                            onPressed: (){
-                              Navigator.pushNamed(context, '/homestu');
-                              if (kDebugMode) {
-                              print('Student.');
-                            } },
-                            style: ElevatedButton.styleFrom(
-                              textStyle: const TextStyle(
-                                color: Colors.white,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                              onPressed: (){
+                                Navigator.pushNamed(context, '/homestu');
+                                if (kDebugMode) {
+                                print('Student.');
+                              } },
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                backgroundColor: buttonColor,
+                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10))),
                               ),
-                              backgroundColor: buttonColor,
-                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10))),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      color: buttonColor,
-                                      padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
-                                      child:  Text('Continue As Student',
-                                        style: GoogleFonts.alegreyaSans(fontSize: 18, color: Colors.white)),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color:Colors.white,
-                                        size: 42,
-                                      ),
-                                    ),
-                                  ],
-                                )))),
+                              child: Text('Continue As Student',
+                                  style: GoogleFonts.alegreyaSans(fontSize: 18, color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -156,59 +162,31 @@ class _roleState extends State<Role> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width*4,
-                        height: 50,
-                        child: ElevatedButton(
-
-                            onPressed: (){
-                              Navigator.pushNamed(context, '/home');
-                              if (kDebugMode) {
-                                print('Teacher.');
-                              } },
-                            style: ElevatedButton.styleFrom(
-                              textStyle: const TextStyle(color: Colors.white),
-                              backgroundColor: buttonColor,
-                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10))),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      color: buttonColor,
-                                      padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
-                                      child:  Text('Continue As Teacher',
-                                          style: GoogleFonts.alegreyaSans(fontSize: 18, color: Colors.white)),
-                                    ),
-                                     const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color:Colors.white,
-                                        size: 40,
-                                      ),
-                                    ),
-                                  ],
-                                )))),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                              onPressed: (){
+                                Navigator.pushNamed(context, '/home');
+                                if (kDebugMode) {
+                                  print('Teacher.');
+                                } },
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(color: Colors.white),
+                                backgroundColor: buttonColor,
+                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                              ),
+                              child: Text('Continue As Teacher',
+                                  style: GoogleFonts.alegreyaSans(fontSize: 18, color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              )
-              // RaisedButton(
-              //   child: const Text('Student'),
-              //   onPressed: () {
-              //     Navigator.pushNamed(context, '/homestu');
-              //   },
-              // ),
-              // RaisedButton(
-              //   child: const Text('Teacher'),
-              //   onPressed: () {
-              //     Navigator.pushNamed(context, '/home');
-              //   },
-              // ),
+              ),
             ],
           )),
     );

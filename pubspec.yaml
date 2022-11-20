@@ -40,12 +40,23 @@ dependencies:
   percent_indicator: ^4.2.2
   another_flushbar: ^1.12.29
   flutter_easyloading: ^3.0.5
+  flutter_native_splash: ^2.2.14
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.1
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  android_12:
+  android: true
+  ios: true
+  image: assets/images/appIcon.png
+
+
 
 
 flutter:

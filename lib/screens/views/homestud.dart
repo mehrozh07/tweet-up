@@ -112,13 +112,13 @@ class _homestudState extends State<homestud> {
                 style: GoogleFonts.questrial(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
-                  color: Color.fromRGBO(229, 195, 27, 1.0),
+                  color: const Color.fromRGBO(229, 195, 27, 1.0),
                   wordSpacing: 2.5,
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28),
               child: Divider(),
             ),
             Padding(

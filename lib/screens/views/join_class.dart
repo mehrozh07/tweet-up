@@ -76,48 +76,9 @@ class _JoinClassState extends State<JoinClass> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(
-                  //       horizontal: 28.0, vertical: 10),
-                  //   child: Text(
-                  //     'You are currently signed in as..',
-                  //     style: GoogleFonts.roboto(),
-                  //   ),
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(
-                  //           horizontal: 28.0, vertical: 10),
-                  //       child: Container(
-                  //           width: 50.0,
-                  //           height: 50.0,
-                  //           decoration:  BoxDecoration(
-                  //               shape: BoxShape.circle,
-                  //               image:  DecorationImage(
-                  //                   fit: BoxFit.fill,
-                  //                   image:  NetworkImage(imgURL)))),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(vertical: 5),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text(user.displayName!,
-                  //               style: GoogleFonts.questrial(
-                  //                   fontWeight: FontWeight.bold)),
-                  //           Text(user.email!,
-                  //               style: GoogleFonts.questrial(
-                  //                   fontWeight: FontWeight.w100)),
-                  //         ],
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 28),
-                    child: const Divider(),
+                    child: Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -133,8 +94,8 @@ class _JoinClassState extends State<JoinClass> {
                             width: MediaQuery.of(context).size.width * 0.8,
                             child: Material(
                               borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Theme.of(context).accentColor,
-                              color: Theme.of(context).accentColor,
+                              shadowColor: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.secondary,
                               child: Builder(builder: (context) {
                                 return TextButton(
                                   onPressed: () async {
@@ -146,7 +107,7 @@ class _JoinClassState extends State<JoinClass> {
                                           _loading = true;
                                         });
                                         String str = code.text;
-                                        late int index;
+                                         int? index;
                                         for (int i = 0; i < str.length; ++i) {
                                           if (str[i] == '.' &&
                                               str[i + 1] == 'c' &&
@@ -155,7 +116,7 @@ class _JoinClassState extends State<JoinClass> {
                                         }
                                         var error = ErrorMsg(' ');
                                         String teacherId =
-                                            str.substring(0, index + 1);
+                                            str.substring(0, index! + 1);
                                         var db = JoinClassDataBase(
                                             code.text,
                                             rollNum.text,
@@ -171,7 +132,7 @@ class _JoinClassState extends State<JoinClass> {
                                       } else {}
                                     }
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Join the class',
                                     style: TextStyle(color: Colors.white),
                                   ),
@@ -183,7 +144,7 @@ class _JoinClassState extends State<JoinClass> {
                       ),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 28),
                     child: Divider(),
                   ),

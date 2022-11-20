@@ -38,20 +38,17 @@ Future<void> main() async {
 }
 
 Map<int, Color> color = {
-  50: const Color.fromRGBO(136, 14, 79, .1),
-  100: const Color.fromRGBO(136, 14, 79, .2),
-  200: const Color.fromRGBO(136, 14, 79, .3),
-  300: const Color.fromRGBO(136, 14, 79, .4),
-  400: const Color.fromRGBO(136, 14, 79, .5),
-  500: const Color.fromRGBO(136, 14, 79, .6),
-  600: const Color.fromRGBO(136, 14, 79, .7),
-  700: const Color.fromRGBO(136, 14, 79, .8),
-  800: const Color.fromRGBO(136, 14, 79, .9),
-  900: const Color.fromRGBO(136, 14, 79, 1),
+  50: const Color.fromRGBO(2, 72, 124, .1),
+  100: const Color.fromRGBO(2, 72, 124, .2),
+  200: const Color.fromRGBO(2, 72, 124, .3),
+  300: const Color.fromRGBO(2, 72, 124, .4),
+  400: const Color.fromRGBO(2, 72, 124, .5),
+  500: const Color.fromRGBO(2, 72, 124, .6),
+  600: const Color.fromRGBO(2, 72, 124, .7),
+  700: const Color.fromRGBO(2, 72, 124, .8),
+  800: const Color.fromRGBO(2, 72, 124, .9),
+  900: const Color.fromRGBO(2, 72, 124, 1.0),
 };
-
-MaterialColor colorCustomAccent = MaterialColor(0xFF2a9d8f, color);
-MaterialColor colorCustomSwatch = MaterialColor(0xFFe76f51, color);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -75,16 +72,13 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   useMaterial3: true,
-                  primarySwatch: Colors.indigo,
-                  primaryColor: Colors.indigoAccent,
+                  primaryColor: const Color(0xff02487c),
                   fontFamily: 'Montserrat',
                   textTheme: const TextTheme(
                     headline1:
                         TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
                   ),
-                  colorScheme:
-                      ColorScheme.fromSwatch(primarySwatch: colorCustomSwatch)
-                          .copyWith(secondary: colorCustomAccent)),
+              ),
               home: const Wrapper(),
               routes: {
                 Register.routeName: (_) => const Register(),

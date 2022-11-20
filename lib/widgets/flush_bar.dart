@@ -39,9 +39,7 @@ class Utils{
     positionOffset: 20,
     icon: const Icon(Icons.error , size: 28 , color: Colors.white,),
    )..show(context),
-
   );
-
  }
 
  showAlertDialogue(BuildContext context, ){
