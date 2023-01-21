@@ -79,7 +79,7 @@ class _CreateClassState extends State<CreateClass> {
                             child: Material(
                               borderRadius: BorderRadius.circular(20.0),
                               shadowColor: Theme.of(context).colorScheme.secondary,
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).colorScheme.secondary,
                               child: Builder(builder: (context) {
                                 return TextButton(
                                   onPressed: () async {

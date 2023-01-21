@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +32,8 @@ class AuthService extends ChangeNotifier{
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      Navigator.pushNamed(
-        context,
-        Role.routeName,
-      ).then((value) {
-        _utils.flushBarErrorMessage('Congrats', context);
-      });
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacementNamed(context, Role.routeName,);
       notifyListeners();
       User? user = result.user;
       notifyListeners();
@@ -45,7 +42,6 @@ class AuthService extends ChangeNotifier{
         _utils.flushBarErrorMessage('Please verify your email address by clicking on the link sent on your registered email id.😅', context);
         notifyListeners();
       }else{
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, Role.routeName);
         notifyListeners();
       }

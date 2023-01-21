@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:tweetup_fyp/screens/authenticate/login.dart';
 import 'package:tweetup_fyp/screens/authenticate/sign_up.dart';
@@ -13,7 +12,6 @@ import 'package:tweetup_fyp/screens/views/subject_class.dart';
 import 'package:tweetup_fyp/screens/views/subject_class_student.dart';
 import 'package:tweetup_fyp/services/auth.dart';
 import './screens/views/created_classes.dart';
-import './wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -73,13 +71,15 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                   useMaterial3: true,
                   primaryColor: const Color(0xff02487c),
+                  primarySwatch: MaterialColor(0xff02487c, color),
                   fontFamily: 'Montserrat',
                   textTheme: const TextTheme(
+
                     headline1:
                         TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
                   ),
               ),
-              home: const Wrapper(),
+              home: FirebaseAuth.instance.currentUser == null ? const LoginScreen() : const Home(),
               routes: {
                 Register.routeName: (_) => const Register(),
                 Role.routeName: (_) => const Role(),
@@ -87,13 +87,12 @@ class MyApp extends StatelessWidget {
                 HomeStudent.routeName: (_) => const HomeStudent(),
                 LoginScreen.id: (_) => const LoginScreen(),
                 CreateClass.routeName: (_) => CreateClass(),
-                CreatedClasses.routeName: (_) => CreatedClasses(),
+                CreatedClasses.routeName: (_) => const CreatedClasses(),
                 JoinClass.routeName: (_) => JoinClass(),
                 SubjectClass.routeName: (_) => SubjectClass(),
                 EnrolledClasses.routeName: (_) => EnrolledClasses(),
                 SubjectClassStudent.routeName: (_) => SubjectClassStudent(),
               },
-              builder: EasyLoading.init(),
             ),
           ),
         ));

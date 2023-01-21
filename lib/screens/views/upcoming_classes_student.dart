@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../services/database.dart';
-import '../../services/loading.dart';
 
 class UpcomingClassesStudent extends StatefulWidget {
   Map<dynamic, dynamic> classData;
@@ -18,19 +16,29 @@ class _UpcomingClassesStudentState extends State<UpcomingClassesStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
+      body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(widget.classData['code'])
               .doc('Upcoming classes')
               .collection('Upcoming classes')
               .snapshots(),
-          builder: (context, AsyncSnapshot classSnapshot) {
-            return classSnapshot.hasData
-                ? ListView.builder(
-                    itemCount: classSnapshot.data.docs.length,
+          builder: (context, AsyncSnapshot<QuerySnapshot> classSnapshot) {
+            if (classSnapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (classSnapshot.data?.docs.length == null) {
+              return const Center(child: Text('No Up Coming Lectures Available'));
+            }
+            if (classSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+              ));
+            }
+            return ListView.builder(
+                    itemCount: classSnapshot.data?.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot lectureData =
-                          classSnapshot.data.docs[index];
+                          classSnapshot.data!.docs[index];
                       print(lectureData.data());
                       final url = TextEditingController();
                       url.text = lectureData['url'];
@@ -84,8 +92,7 @@ class _UpcomingClassesStudentState extends State<UpcomingClassesStudent> {
                         ),
                       );
                     },
-                  )
-                : Center(child: Loader());
+                  );
           }),
     );
   }

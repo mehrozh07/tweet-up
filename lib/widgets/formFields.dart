@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 formField(controller, title, context) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.only(top: 8, bottom: 8),
     child: TextFormField(
       validator: ((value) => value!.isEmpty ? 'Enter a value' : null),
       controller: controller,

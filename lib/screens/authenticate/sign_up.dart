@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tweetup_fyp/generated/assets.dart';
 import 'package:tweetup_fyp/screens/authenticate/login.dart';
 import 'package:tweetup_fyp/services/auth.dart';
 import 'package:tweetup_fyp/widgets/flush_bar.dart';
@@ -63,238 +65,237 @@ class _RegisterState extends State<Register> {
         width: width,
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Image.asset( 'assets/images/login_banner.png',
-                  height: 300,
-                  width: MediaQuery.of(context).size.width,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: height * 0.09,
-                      ),
-                      TextFormField(
-                        controller: nameC,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "* Required";
-                          } else {
-                            return null;
-                          }
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r"[a-zA-Z]+|\s"),
-                          )
-                        ],
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          hintText: 'Name',
-                          hintStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
-                          labelText: 'Name',
-                          labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          border: const OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: height*2/100,),
-                      TextFormField(
-                        controller: emailC,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        cursorColor: Theme.of(context).primaryColor,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "* Required";
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          hintText: 'Email',
-                          hintStyle:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                          labelText: 'Email',
-                          labelStyle:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          border: const OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.02,
-                      ),
-                      TextFormField(
-                        controller: pass,
-                        obscureText: _isPasswordVisible,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.go,
-                        cursorColor: Theme.of(context).primaryColor,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "* Required";
-                          } else if (value.length < 6) {
-                            return "Password should be at least 6 characters";
-                          } else if (value.length > 15) {
-                            return "Password should not be greater than 15 characters";
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.lock_open_outlined,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          hintText: 'password',
-                          hintStyle:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                          labelText: 'password',
-                          labelStyle:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                          suffixIcon: InkWell(
-                            onTap: () {
-                              toggle();
-                            },
-                            child: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              SizedBox(height: height * 0.1),
+              Image.asset( Assets.imagesAppLogo,
+                height: height*0.2,
+                width: MediaQuery.of(context).size.width*0.2,
+              ),
+              SizedBox(height: height * 0.1),
+              TextFormField(
+                controller: nameC,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "* Required";
+                  } else {
+                    return null;
+                  }
+                },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r"[a-zA-Z]+|\s"),
+                  )
+                ],
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 4, right: 5, top: 0, bottom: 0),
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: Theme.of(context).primaryColor,
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.04,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: MaterialButton(
-                    height: 50,
-                    minWidth: 340,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          _loading = true;
-                          name = nameC.text.toString().trim();
-                          email = emailC.text.toString().trim();
-                          password = pass.text.toString().trim();
-                        });
-                        _loading = true;
-                        await _auth.signUp(email, password, name, context);
-                      } else {
-                        _loading = true;
-                        _utils.flushBarErrorMessage(
-                            "Registration Failed", context);
-                      }
-                    },
-                    color: Colors.indigoAccent,
-                    child: _loading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                            backgroundColor: Colors.transparent,
-                          )
-                        :  Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              fontSize: textSize * 24,
-                              color: Colors.white,
-                            ),
-                          ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.08,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      children: [
-                         Text(
-                          "Already a member?",
-                          style: TextStyle(fontSize: textSize * 16),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              LoginScreen.id,
-                            );
-                          },
-                          child: Text(
-                            "Sign In",
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: textSize * 16),
-                          ),
-                        ),
-                      ],
+                  hintText: 'Name',
+                  hintStyle:
+                  TextStyle(color: Theme.of(context).primaryColor),
+                  labelText: 'Name',
+                  labelStyle:
+                  TextStyle(color: Theme.of(context).primaryColor),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
                     ),
-                  ],
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(10)),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8))
+                  ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: height*0.02),
+              TextFormField(
+                controller: emailC,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                cursorColor: Theme.of(context).primaryColor,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "* Required";
+                  } else {
+                    return null;
+                  }
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 4, right: 5, top: 0, bottom: 0),
+                  prefixIcon: Icon(
+                    Icons.email_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  hintText: 'Email',
+                  hintStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
+                  labelText: 'Email',
+                  labelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(10)),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8))
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              TextFormField(
+                controller: pass,
+                obscureText: _isPasswordVisible,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.go,
+                cursorColor: Theme.of(context).primaryColor,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "* Required";
+                  } else if (value.length < 6) {
+                    return "Password should be at least 6 characters";
+                  } else if (value.length > 15) {
+                    return "Password should not be greater than 15 characters";
+                  } else {
+                    return null;
+                  }
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 4, right: 5, top: 0, bottom: 0),
+                  prefixIcon: Icon(
+                    Icons.lock_open_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  hintText: 'password',
+                  hintStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
+                  labelText: 'password',
+                  labelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      toggle();
+                    },
+                    child: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8))
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: height * 0.04,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _loading = true;
+                            name = nameC.text.toString().trim();
+                            email = emailC.text.toString().trim();
+                            password = pass.text.toString().trim();
+                          });
+                          _loading = true;
+                          await _auth.signUp(email, password, name, context);
+                        } else {
+                          _loading = true;
+                          _utils.flushBarErrorMessage(
+                              "Registration Failed", context);
+                        }
+                      },
+                      child: _loading
+                          ? const Center(
+                            child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                          )
+                          :  const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: height * 0.08,
+              ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                runAlignment: WrapAlignment.center,
+                children: [
+                   Text(
+                    "Already a member?",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: textSize * 17),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        LoginScreen.id,
+                      );
+                    },
+                    child: Text(
+                      "Sign In",
+                      softWrap: true,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: textSize * 17),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

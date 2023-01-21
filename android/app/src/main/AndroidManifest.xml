@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tweet_up.tweetup_fyp">
    <application
-        android:label="tweetup_fyp"
+        android:label="Tweet Up"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

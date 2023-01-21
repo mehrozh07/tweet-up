@@ -11,7 +11,7 @@ class TokenModel{
        creditAt = data['CreditAt'];
 
   static TokenModel? fromMap(Map<String, dynamic> map){
-    if(map == null) {
+    if(map.isEmpty) {
       return null;
     }
     return TokenModel(

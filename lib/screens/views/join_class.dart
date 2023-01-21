@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 
 import '../../models/error.dart';
 import '../../services/database.dart';
@@ -124,12 +125,14 @@ class _JoinClassState extends State<JoinClass> {
                                             name.text,
                                             user.email!,
                                             error);
-                                        await db.JoinClass();
+                                        await db.joinClass();
                                         setState(() {
                                           _loading = false;
                                           message = error.error;
                                         });
-                                      } else {}
+                                      } else {
+                                        Utils.snackBar(message: "Class Not Exist", context: context);
+                                      }
                                     }
                                   },
                                   child: const Text(

@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:tweetup_fyp/services/token_model.dart';
 import 'package:tweetup_fyp/services/user_model.dart';
-
 import 'message_model.dart';
 
 class FirestoreService {
@@ -25,7 +24,6 @@ class FirestoreService {
       if (e is PlatformException) {
         return e.message;
       }
-
       return e.toString();
     }
   }

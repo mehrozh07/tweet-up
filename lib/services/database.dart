@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,8 +15,7 @@ class MyClassDatabase {
   File? file;
 
   MyClassDatabase(this.uid, this.teacher);
-  Future createClass(
-      subjectName, batch, professorName, email, err, code) async {
+  Future createClass(subjectName, batch, professorName, email, err, code) async {
     FirebaseFirestore.instance
         .collection('allClasses')
         .doc(code)
@@ -42,15 +42,19 @@ class MyClassDatabase {
     }).catchError((error) {
       err.error = "Failed to add user: $error";
     });
-  }
+  }}
+
+void deleteClass(code){
+  FirebaseFirestore.instance.collection('${FirebaseAuth.instance.currentUser?.email}').doc(code).delete();
 }
+
 class JoinClassDataBase {
   String code, rollNum, studentName, email;
   var collName;
   ErrorMsg error;
   JoinClassDataBase(this.code, this.rollNum, this.collName, this.studentName,
       this.email, this.error);
-  Future JoinClass() async {
+  Future joinClass() async {
     if (code.contains(email)) {
       error.error = 'You know you are the teacher of this class. Right?. 🤣🤣';
     } else {

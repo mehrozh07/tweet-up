@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tweetup_fyp/screens/authenticate/login.dart';
+import 'package:tweetup_fyp/screens/views/role.dart';
 import 'package:tweetup_fyp/services/drawer.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import '../../constants/constants.dart';
 import 'create_class.dart';
 import 'created_classes.dart';
@@ -33,14 +36,15 @@ class _HomeState extends State<Home> {
         MediaQuery.of(context).size.height - AppBar().preferredSize.height;
     final String? name = user != null ? user.displayName : 'Name';
     return Scaffold(
-      drawer: CustomDrawer(),
+      // drawer: CustomDrawer(),
       appBar: AppBar(
         elevation: 0,
         actions: [
           IconButton(
             onPressed: () async {
+              Utils.alertDialogue(context: context, title: "Log out");
             },
-            icon: const Icon(Icons.logout,),
+            icon: const Icon(Icons.logout,color: Colors.white),
           )
         ],
         iconTheme: const IconThemeData(color: Colors.white),
@@ -101,8 +105,7 @@ class _HomeState extends State<Home> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed(CreatedClasses.routeName,
-                        arguments: user?.email);
+                    Navigator.of(context).pushNamed(CreatedClasses.routeName, arguments: user?.email);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(30),
@@ -158,8 +161,6 @@ class _UserInfoState extends State<UserInfo> {
 
     @override
   Widget build(BuildContext context) {
-    final User? user = _auth1.currentUser;
-    final userUid = user?.uid;
     return Stack(
       children: [
         Container(
@@ -192,11 +193,10 @@ class _UserInfoState extends State<UserInfo> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Text(
-                      widget.user!.displayName!, textAlign: TextAlign.start, style:
+                  Text('${widget.user?.displayName}', textAlign: TextAlign.start, style:
                           GoogleFonts.alegreya(fontWeight: FontWeight.bold, fontSize: 30, fontStyle: FontStyle.italic)),
                   // SizedBox(height: 2.h,),
-                  Text(widget.user!.email!, style:
+                  Text('${widget.user?.email}', style:
                   GoogleFonts.questrial(fontWeight: FontWeight.bold)),
                 ],
                 ),

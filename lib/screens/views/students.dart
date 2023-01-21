@@ -1,26 +1,26 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Students extends StatefulWidget {
   Map<dynamic, dynamic> classData;
-  Students(this.classData);
+  Students(this.classData, {super.key});
 
   @override
   State<Students> createState() => _StudentsState();
 }
-
 class _StudentsState extends State<Students> {
-
-
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -95,11 +95,7 @@ class NoStudentsEnrolled extends StatelessWidget {
               if (kDebugMode) {
                 print(classData['code']);
               }
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.pinkAccent,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text("Code copied😁",
-                      style: TextStyle(color: Colors.white))));
+              Utils.snackBar(message: 'Code copied😁', context: context);
             },
             child: Center(
               child: Text(
@@ -119,7 +115,7 @@ class NoStudentsEnrolled extends StatelessWidget {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
+  const UserInfo({super.key,
       required this.imgURL,
     required this.user,
     required this.classData,
@@ -172,9 +168,9 @@ class UserInfo extends StatelessWidget {
             )
           ],
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 28),
-          child: const Divider(),
+          child: Divider(),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
@@ -195,7 +191,7 @@ class UserInfo extends StatelessWidget {
 }
 
 class ListOfStudents extends StatefulWidget {
-   ListOfStudents({Key? key,
+   const ListOfStudents({Key? key,
 
     required this.classData, required this.user,
   }) : super(key: key) ;
@@ -207,12 +203,8 @@ class ListOfStudents extends StatefulWidget {
 }
 
 class _ListOfStudentsState extends State<ListOfStudents> {
-  final _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth1 = FirebaseAuth.instance;
   var data;
-
-
-
   showDialogFunction(img, name) async{
   return showDialog(
   context: context,
@@ -227,30 +219,25 @@ class _ListOfStudentsState extends State<ListOfStudents> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Hero(
-                tag: "imgNetwork",
+              Hero(tag: "${_auth1.currentUser?.photoURL}",
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
-                  child: Image.network(
-                    img,
+                  child: Image.network(_auth1.currentUser!.photoURL!,
                     width: 300,
                     height: 300,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
-              Container(
-                // width: 200,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    name,
-                    maxLines: 3,
-                    style: TextStyle(fontSize: 17, color: Colors.grey[100]),
-                    textAlign: TextAlign.center,
-                  ),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  name,
+                  maxLines: 3,
+                  style: TextStyle(fontSize: 17, color: Colors.grey[100]),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],
@@ -273,13 +260,11 @@ class _ListOfStudentsState extends State<ListOfStudents> {
 
     final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("usersData").doc(_uid).get();
     setState((){
-      print(_userImageUrl.toString());
       _userImageUrl = userDoc.get("imageUrl");
     });
   }
   @override
   Widget build(BuildContext context) {
-    final User? usser = _auth1.currentUser;
     final user = Provider.of<User>(context);
     return Stack(
       children: [
@@ -290,7 +275,7 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                 name = widget.classData['studentList'][index]['studentName'],
                 email = widget.classData['studentList'][index]['email'];
             return Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding:  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
@@ -317,9 +302,9 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                           // Convert the Mailto instance into a string.
                           // Use either Dart's string interpolation
                           // or the toString() method.
-                          await launch('$mailtoLink');
+                          await launch('mail:$mailtoLink');
                         },
-                        child: const Icon(Icons.email, color: Color(0xffFF6A83),),
+                        child: Icon(Icons.email, color: Theme.of(context).primaryColor,),
                       ),
                       PopupMenuButton(
                         // icon: Icon(Icons.highlight_remove),
@@ -336,22 +321,21 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                                             Container(
                                               width: 300,
                                               height: 100,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 borderRadius: BorderRadius.
                                                 all(Radius.circular(8)),
                                               ),
                                               child:  BackdropFilter(
                                                 filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                                                child: AlertDialog(
+                                                child: CupertinoAlertDialog(
                                                   title:  const Text("Alert Box"),
                                                   content: Wrap(children:  [
                                                     const Text("Do You Want to remove "),
-                                                    Text(
-                                                      name =
+                                                    Text(name =
                                                       widget.classData['studentList']
                                                       [index]['studentName'],
-                                                      style:  TextStyle(
-                                                        color: const Color(0xffFF6A83),
+                                                      style: TextStyle(
+                                                        color: Theme.of(context).primaryColor,
                                                         fontSize: 18,
                                                       ),),
                                                     const Text(" from class"),
@@ -365,26 +349,7 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                                                     ),
                                                     TextButton(
                                                         onPressed: () async{
-                                                          Navigator.of(context).pop();
-                                                          _firestore.collection("${user.email}").
-                                                          doc('${widget.classData['code']}').
-                                                          collection('studentList').doc('$index').delete().then((value) {
-                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(
-                                                                content: Wrap(
-                                                                    clipBehavior: Clip.antiAlias,
-                                                                    children: [
-                                                                      Text('${ name =
-                                                                      widget.classData['studentList'][index]['studentName']}',
-                                                                        style: const TextStyle(color: Colors.blue),),
-                                                                      const Text(" removed successfully from class"),]
-                                                                ),
-                                                                backgroundColor: Colors.pinkAccent,
-                                                                behavior: SnackBarBehavior.floating,
-                                                              ),
-                                                            );
-                                                          });
-                                                          debugPrint("Student Removed");
+
                                                         },
                                                         child: const Text("Remove")
                                                     ),
@@ -407,8 +372,7 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                   ),
                   leading: GestureDetector(
                     onTap: (){
-                      showDialogFunction(_userImageUrl,
-                          '${ name = widget.classData['studentList'][index]['studentName']}');
+                      showDialogFunction(_userImageUrl, '${ name = widget.classData['studentList'][index]['studentName']}');
                     },
                     child: StreamBuilder(
                         stream: FirebaseFirestore.instance.collection("usersData").doc(user.uid).snapshots(),
@@ -420,7 +384,7 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                    color: const Color(0xffFF6A83),
+                                    color: Theme.of(context).primaryColor,
                                     width: 1
                                 ),
                               ),
@@ -429,21 +393,20 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                                   child: const CircularProgressIndicator()),
                             );
                           }
-                          var userDocument = snapshot.data;
                           return Hero(
-                            tag: "imgNetwork",
+                            tag: "${user.photoURL}",
                             child: Container(
                               width: 60,
                               height: 70,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                    color: const Color(0xffFF6A83),
+                                    color: Theme.of(context).primaryColor,
                                     width: 1
                                 ),
-                                image:      DecorationImage(
+                                image: DecorationImage(
                                   fit: BoxFit.fill,
-                                  image:  NetworkImage(_userImageUrl.toString()),
+                                  image:  NetworkImage(user.photoURL!),
                                 ),
                               ),
                             ),

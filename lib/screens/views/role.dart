@@ -36,7 +36,7 @@ class _roleState extends State<Role> {
       body: Center(
           child: Column(
             children: <Widget>[
-        Padding(
+              Padding(
           padding:  const EdgeInsets.only(top: 10),
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -51,10 +51,50 @@ class _roleState extends State<Role> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                      onPressed: (){},
+                      onPressed: (){
+                        showModalBottomSheet<void>(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(12),
+                                topLeft: Radius.circular(12)),
+                          ),
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    topLeft: Radius.circular(12)),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const ListTile(
+                                      title: Text('Start instant meeting'),
+                                      leading: Icon(Icons.video_call),
+                                    ),
+                                    const ListTile(
+                                      title: Text('Scheduled class'),
+                                      leading: Icon(Icons.date_range),
+                                    ),
+                                    ListTile(
+                                      title: const Text('Close'),
+                                      leading: const Icon(Icons.close),
+                                      onTap: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                       child: Text('New Meeting',
                       style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           color: Colors.white,
                         )
                       ),),
@@ -69,7 +109,9 @@ class _roleState extends State<Role> {
                         side: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    onPressed: (){},
+                    onPressed: (){
+
+                    },
                     child: Text('Join with a code',
                       style: GoogleFonts.poppins(
                           textStyle: TextStyle(

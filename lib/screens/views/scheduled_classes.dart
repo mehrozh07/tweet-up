@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/loading.dart';
 
@@ -78,14 +79,7 @@ class _ScheduledClassesState extends State<ScheduledClasses> {
                                   if (await canLaunch(url.text))
                                     launch(url.text);
                                   else {
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                        backgroundColor:
-                                            Color.fromRGBO(219, 22, 47, 1),
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Text(
-                                            "Can't open the provided link",
-                                            style: TextStyle(
-                                                color: Colors.white))));
+                                    Utils.snackBar(message: "Can't open the provided link", context: context);
                                   }
                                 },
                               ),

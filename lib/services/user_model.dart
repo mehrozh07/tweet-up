@@ -9,7 +9,7 @@ class UserModel{
         username = data['username'],
         email = data['email'];
   static UserModel? fromMap(Map<String, dynamic> map){
-    if(map == null) {
+    if(map.isEmpty) {
       return null;
     }
     return UserModel(

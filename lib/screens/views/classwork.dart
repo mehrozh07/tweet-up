@@ -185,9 +185,9 @@ class _ClassworkState extends State<Classwork>
     return Scaffold(
       floatingActionButton: SpeedDial(
         // both default to 16
-        childMargin: EdgeInsets.only(right: 18, bottom: 10),
+        childMargin: const EdgeInsets.only(right: 18, bottom: 10),
         animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: IconThemeData(size: 22),
+        animatedIconTheme: const IconThemeData(size: 22),
         // this is ignored if animatedIcon is non null
 
         // visible: true,

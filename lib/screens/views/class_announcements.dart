@@ -81,6 +81,9 @@ class _AnnouncementsState extends State<Announcements> {
   void sendNotification() async{
 
   }
+  var sendMessage = TextEditingController();
+  Color? color = Colors.grey.shade300;
+  bool _isTure = false;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
@@ -92,107 +95,106 @@ class _AnnouncementsState extends State<Announcements> {
       imgURL = user.photoURL ?? 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
     }
     return Scaffold(
-      body: Container(
+      bottomSheet: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: announcement,
+                  style: const TextStyle(
+                    fontSize: 18,
+
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  textInputAction: TextInputAction.newline,
+                  onChanged: (String? index){
+                    if(index!.isNotEmpty){
+                      setState(() {
+                        color = Theme.of(context).primaryColor;
+                        _isTure = false;
+                      });
+                    }else if(index.isEmpty){
+                      setState(() {
+                        color = Colors.grey.shade300;
+                        _isTure = true;
+                      });
+                    }
+                  },
+                  cursorColor: Theme.of(context).primaryColor,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: AbsorbPointer(
+                        absorbing: _isTure ? true : false,
+                        child: IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor: color!,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async{
+                            if (_formKey.currentState!.validate()){
+                              setState(() {
+                                _loading = true;
+                              });
+                              var db = MakeAnnouncement(widget.classData['code'],
+                                  user!.displayName!, announcement.text);
+                              await db.makeAnnouncement();
+                              setState(() {
+                                FocusScope.of(context).unfocus();
+                                announcement.text = '';
+                                _loading = false;
+                              });
+                            }
+                            setState((){
+                            });
+                            flutterLocalNotificationsPlugin.show(
+                              0,
+                              "Announcement",
+                              widget.toString(),
+                              NotificationDetails(
+                                android: AndroidNotificationDetails(
+                                    channel.id,
+                                    channel.name,
+                                    importance: Importance.high,
+                                    playSound: true,
+                                    icon: '@mipmap/ic_launcher'
+                                ),
+                              ),
+                            );
+                            if (kDebugMode) {
+                              print(flutterLocalNotificationsPlugin.toString());
+                            }
+                          },
+                          icon: const Icon(Icons.send_outlined, size: 28, color: Colors.black54,),
+                        ),
+                      ),
+                    ),
+                    filled: true,
+                    hintText: "Type a message",
+                    fillColor: Colors.grey.shade300,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: SizedBox(
         height: MediaQuery.of(context).size.height -
             kBottomNavigationBarHeight -
             AppBar().preferredSize.height,
         child: Column(
           children: [
-            // UserInfo(imgURL: imgURL, user: user!, classData: widget.classData),
-            Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextFormField(
-                  maxLines: 3,
-                  validator: ((value) =>
-                      value!.isEmpty ? 'Post can\'t be empty' : null),
-                  controller: announcement,
-                  decoration: const InputDecoration(
-                    hintText: 'title',
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * .4,
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      )),
-                  onPressed: () {
-                    announcement.text = '';
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-                TextButton(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white)),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * .4,
-                      child: const Text(
-                        'Post',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  onPressed: () async{
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        _loading = true;
-                      });
-                      var db = MakeAnnouncement(widget.classData['code'],
-                          user!.displayName!, announcement.text);
-                      await db.makeAnnouncement();
-                      setState(() {
-                        FocusScope.of(context).unfocus();
-                        announcement.text = '';
-                        _loading = false;
-                      });
-                    }
-                    setState((){
-                    });
-                        flutterLocalNotificationsPlugin.show(
-                        0,
-                        "Announcement",
-                        widget.toString(),
-                        NotificationDetails(
-                          android: AndroidNotificationDetails(
-                              channel.id,
-                              channel.name,
-                              importance: Importance.high,
-                              playSound: true,
-                              icon: '@mipmap/ic_launcher'
-                          ),
-                        ),
-                      );
-                      if (kDebugMode) {
-                        print(flutterLocalNotificationsPlugin.toString());
-                      }
-                    }
-                )
-              ],
-            ),
             ListOfAnnouncements(classData: widget.classData)
           ],
         ),
@@ -202,81 +204,61 @@ class _AnnouncementsState extends State<Announcements> {
 }
 
 class ListOfAnnouncements extends StatelessWidget {
-  const ListOfAnnouncements({super.key,
+   ListOfAnnouncements({super.key,
     required this.classData,
   }) ;
 
   final Map classData;
 
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
-    const kDefaultPadding = 20.0;
     return Expanded(
-      child: StreamBuilder(
+      child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(classData['code'])
               .doc('Announcements')
-              .collection('announcements')
+              .collection('announcements').orderBy('post', descending: true)
               .snapshots(),
-          builder: (context, AsyncSnapshot announcementSnapshot) {
+          builder: (context, AsyncSnapshot<QuerySnapshot> announcementSnapshot) {
             return announcementSnapshot.hasData
                 ? ListView.builder(
-                    itemCount: announcementSnapshot.data.docs.length,
+                    itemCount: announcementSnapshot.data?.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot announcementData =
-                          announcementSnapshot.data.docs[index];
-                      if (kDebugMode) {
-                        print(announcementData.data());
-                      }
-
+                          announcementSnapshot.data!.docs[index];
+                      // if (kDebugMode) {
+                      //   print(announcementData.data());
+                      // }
                       return Padding(
                         padding:  const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                         child: Column(
+                          crossAxisAlignment: FirebaseAuth.instance.currentUser == null ?
+                          CrossAxisAlignment.start : CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              announcementData['postedBy'],
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
+                            ),
                             const SizedBox(height: 2),
                             Container(
+                              padding: const EdgeInsets.only(left: 12, right: 12, bottom: 8 , top: 8),
                               decoration:  BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.shade400,
-                                      blurRadius: 5.0,
-                                      spreadRadius: 0.0,
-                                      offset: const Offset(2.0,
-                                          2.0), // shadow direction: bottom right
-                                    )
-                                  ],
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(20)),
-                                  color: Colors.grey.shade300),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          announcementData['postedBy'],
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(width: 8,),
-                                        Text(announcementData['time']),
-                                      ],
-                                    ),
-                                     const Divider(height: 1,),
-                                    Padding(
-                                      padding:  const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                                      child: Text(
-                                        announcementData['post'],
-                                        textAlign: TextAlign.left,
-                                        style: GoogleFonts.alice(fontSize: 20),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  borderRadius:  const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                  color: Theme.of(context).primaryColor.withOpacity(0.4)),
+                              child: Text(
+                                announcementData['post'],
+                                textAlign: TextAlign.left,
+                                style: GoogleFonts.alice(fontSize: 20),
                               ),
                             ),
+                            Text(announcementData['time']),
                           ],
                         ),
                       );

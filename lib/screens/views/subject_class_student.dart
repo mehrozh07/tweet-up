@@ -26,9 +26,9 @@ class _SubjectClassStudentState extends State<SubjectClassStudent> {
       appBar: AppBar(
         title: Text(
           classData['Name'].toString(),
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
         backgroundColor: Colors.white,
       ),
       body: tabs[_currentIndex],

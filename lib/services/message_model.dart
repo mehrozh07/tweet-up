@@ -1,3 +1,4 @@
+// ignore_for_file: null_check_always_fails
 class MessagesModel {
   String receiverId;
   String senderId;
@@ -24,7 +25,9 @@ class MessagesModel {
         createdAt = data['createdAt'];
 
   static MessagesModel fromMap(Map<String, dynamic> map) {
-    if (map == null) return null!;
+    if (map.isEmpty) {
+      return null!;
+    }
 
     return MessagesModel(
       receiverId: map['receiverId'],
