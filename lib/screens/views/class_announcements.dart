@@ -104,10 +104,6 @@ class _AnnouncementsState extends State<Announcements> {
               Expanded(
                 child: TextFormField(
                   controller: announcement,
-                  style: const TextStyle(
-                    fontSize: 18,
-
-                  ),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   textInputAction: TextInputAction.newline,
@@ -126,6 +122,7 @@ class _AnnouncementsState extends State<Announcements> {
                   },
                   cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
@@ -135,12 +132,7 @@ class _AnnouncementsState extends State<Announcements> {
                       child: AbsorbPointer(
                         absorbing: _isTure ? true : false,
                         child: IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor: color!,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
+
                           onPressed: () async{
                             if (_formKey.currentState!.validate()){
                               setState(() {
@@ -151,7 +143,7 @@ class _AnnouncementsState extends State<Announcements> {
                               await db.makeAnnouncement();
                               setState(() {
                                 FocusScope.of(context).unfocus();
-                                announcement.text = '';
+                                announcement.clear();
                                 _loading = false;
                               });
                             }
@@ -171,11 +163,9 @@ class _AnnouncementsState extends State<Announcements> {
                                 ),
                               ),
                             );
-                            if (kDebugMode) {
-                              print(flutterLocalNotificationsPlugin.toString());
-                            }
                           },
-                          icon: const Icon(Icons.send_outlined, size: 28, color: Colors.black54,),
+                          icon: Icon(Icons.send_outlined, size: 28, color: announcement.text.isEmpty ? Colors.grey :
+                            Theme.of(context).primaryColor,),
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tweetup_fyp/screens/views/students.dart';
 import 'package:tweetup_fyp/screens/views/upcoming_classes.dart';
@@ -16,6 +17,8 @@ class _SubjectClassState extends State<SubjectClass> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     Map<dynamic, dynamic> classData = ModalRoute.of(context)?.settings.arguments as dynamic;
     final tabs = [
       Announcements(classData),
@@ -27,44 +30,54 @@ class _SubjectClassState extends State<SubjectClass> {
       appBar: AppBar(
         title: Text(
           classData['subName'].toString(),
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
         backgroundColor: Colors.white,
       ),
       body: tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.lightGreen,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Theme.of(context).primaryColor,
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.stream,
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          indicatorColor: Colors.blue.shade50,
+          labelTextStyle: MaterialStateProperty.all(
+              const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)
+          ),
+        ),
+        child: NavigationBar(
+            height: 60,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            selectedIndex: _currentIndex,
+            animationDuration: const Duration(seconds: 3),
+            onDestinationSelected: (index)=>{
+              setState((){
+                _currentIndex = index;
+              })
+            },
+            backgroundColor: Colors.blue.shade100,
+
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.announcement_outlined),
+                label: 'asseveration',
+                selectedIcon: Icon(Icons.announcement_outlined ),
               ),
-              label: 'announcement'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.class_,
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.rectangle_grid_2x2),
+                selectedIcon: Icon(CupertinoIcons.rectangle_grid_2x2,
+                  color:  Color(0xFF223263),),
+                label: 'Classwork',
               ),
-              label: 'classwork'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.people,
+              NavigationDestination(
+                icon: Icon(Icons.person_pin_outlined),
+                selectedIcon: Icon(Icons.person_pin_outlined,),
+                label: 'Students',
               ),
-              label: 'Students'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.meeting_room,
+              NavigationDestination(
+                icon: Icon(Icons.upcoming_outlined),
+                selectedIcon: Icon(Icons.upcoming_outlined),
+                label: 'Up Coming',
               ),
-              label: 'upcoming lectures'),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+            ]),
       ),
     );
   }

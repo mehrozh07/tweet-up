@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tweetup_fyp/screens/authenticate/login.dart';
 
 class Utils{
-  static snackBar({required message, required context}){
+  static snackBar({required message, required context, required Color color}){
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message,
@@ -12,7 +12,7 @@ class Utils{
             color: Colors.white,
           ),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: color,
         behavior: SnackBarBehavior.floating,
      ),
     );

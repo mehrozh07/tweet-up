@@ -131,7 +131,7 @@ class _JoinClassState extends State<JoinClass> {
                                           message = error.error;
                                         });
                                       } else {
-                                        Utils.snackBar(message: "Class Not Exist", context: context);
+                                        Utils.snackBar(message: "Class Not Exist",color: const Color(0xffFF8C00), context: context);
                                       }
                                     }
                                   },

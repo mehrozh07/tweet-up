@@ -120,7 +120,8 @@ class EnrolledClasses extends StatelessWidget {
                                                                 .doc(document.id).delete().then((value){
                                                                   Navigator.pop(context);
                                                                   Utils.snackBar(
-                                                                      message: '${document['Name']} class leave successfully',
+                                                                      color: const Color(0xffFF8C00),
+                                                                      message: '${document['Name']} class the leave',
                                                                       context: context);
                                                             });
                                                           },

@@ -18,7 +18,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,9 +75,8 @@ class MyApp extends StatelessWidget {
                   primarySwatch: MaterialColor(0xff02487c, color),
                   fontFamily: 'Montserrat',
                   textTheme: const TextTheme(
-
-                    headline1:
-                        TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+                    displayLarge:
+                    TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
                   ),
               ),
               home: FirebaseAuth.instance.currentUser == null ? const LoginScreen() : const Home(),

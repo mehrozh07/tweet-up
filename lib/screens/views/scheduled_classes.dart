@@ -79,7 +79,7 @@ class _ScheduledClassesState extends State<ScheduledClasses> {
                                   if (await canLaunch(url.text))
                                     launch(url.text);
                                   else {
-                                    Utils.snackBar(message: "Can't open the provided link", context: context);
+                                    Utils.snackBar(message: "Can't open the provided link",color: const Color(0xffFF8C00), context: context);
                                   }
                                 },
                               ),

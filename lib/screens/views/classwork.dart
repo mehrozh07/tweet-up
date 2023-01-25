@@ -184,21 +184,13 @@ class _ClassworkState extends State<Classwork>
     }
     return Scaffold(
       floatingActionButton: SpeedDial(
-        // both default to 16
         childMargin: const EdgeInsets.only(right: 18, bottom: 10),
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: const IconThemeData(size: 22),
-        // this is ignored if animatedIcon is non null
-
-        // visible: true,
-        // If true user is forced to close dial manually
-        // by tapping main button and overlay is not rendered.
         closeManually: false,
         curve: Curves.bounceIn,
         overlayColor: Colors.black,
         overlayOpacity: 0.5,
-        onOpen: () => print('OPENING DIAL'),
-        onClose: () => print('DIAL CLOSED'),
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
         backgroundColor: Colors.white,
@@ -222,7 +214,7 @@ class _ClassworkState extends State<Classwork>
             child: const Icon(Icons.brush),
             backgroundColor: Colors.blue,
             label: 'Give assignment',
-            labelStyle: TextStyle(fontSize: 18),
+            labelStyle: const TextStyle(fontSize: 18),
             onTap: () {
               Navigator.push(
                 context,
@@ -234,7 +226,7 @@ class _ClassworkState extends State<Classwork>
           ),
         ],
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height -
             kBottomNavigationBarHeight -
             AppBar().preferredSize.height,
@@ -246,7 +238,7 @@ class _ClassworkState extends State<Classwork>
               children:  [
                 TextButton(
                   child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
@@ -266,9 +258,9 @@ class _ClassworkState extends State<Classwork>
                 ),
                 TextButton(
                   child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white)),
                       alignment: Alignment.center,
@@ -294,8 +286,7 @@ class _ClassworkState extends State<Classwork>
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
-
+  const UserInfo({super.key,
     required this.imgURL,
     required this.user,
     required this.classData,
@@ -332,7 +323,7 @@ class UserInfo extends StatelessWidget {
                           fit: BoxFit.fill, image:  NetworkImage(imgURL)))),
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(vertical: 5),
+              padding:  const EdgeInsets.symmetric(vertical: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

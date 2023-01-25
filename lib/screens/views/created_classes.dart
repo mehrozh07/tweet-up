@@ -147,6 +147,7 @@ class _CreatedClassesState extends State<CreatedClasses> {
                                                               .delete().then((value){
                                                                 Navigator.of(context).pop();
                                                                 Utils.snackBar(
+                                                                  color: const Color(0xff219653),
                                                                     message: "${document['subName']} Class deleted successfully",
                                                                     context: context);
                                                                 debugPrint("class deleted");
@@ -243,7 +244,7 @@ class _CreatedClassesState extends State<CreatedClasses> {
                                     if (kDebugMode) {
                                       print(document['code']);
                                     }
-                                   Utils.snackBar(message: 'Code copied😁', context: context);
+                                   Utils.snackBar(message: 'Code copied😁',color: const Color(0xff219653), context: context);
                                   },
                                   child: Center(
                                     child: Text(

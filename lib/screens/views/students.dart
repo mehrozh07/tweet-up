@@ -87,7 +87,10 @@ class NoStudentsEnrolled extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(219, 22, 47, 1),
+              backgroundColor: Theme.of(context).primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              )
             ),
             onPressed: () async {
               ClipboardData data = ClipboardData(text: (classData['code']));
@@ -95,7 +98,7 @@ class NoStudentsEnrolled extends StatelessWidget {
               if (kDebugMode) {
                 print(classData['code']);
               }
-              Utils.snackBar(message: 'Code copied😁', context: context);
+              Utils.snackBar(message: 'Code copied😁',color: const Color(0xffFF8C00), context: context);
             },
             child: Center(
               child: Text(
