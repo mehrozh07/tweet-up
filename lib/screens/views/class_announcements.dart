@@ -179,13 +179,11 @@ class _AnnouncementsState extends State<Announcements> {
           ),
         ),
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height -
-            kBottomNavigationBarHeight -
-            AppBar().preferredSize.height,
-        child: Column(
+      body: Scaffold(
+        body: Column(
           children: [
-            ListOfAnnouncements(classData: widget.classData)
+            ListOfAnnouncements(classData: widget.classData),
+            SizedBox(height: 60,),
           ],
         ),
       ),

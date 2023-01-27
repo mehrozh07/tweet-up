@@ -37,7 +37,7 @@ class _CreateClassState extends State<CreateClass> {
     String? coll = user.email;
     final CollectionReference myClassCollection =
         FirebaseFirestore.instance.collection(coll!);
-    final db = MyClassDatabase(user.uid, myClassCollection);
+    final db = ClassDatabase(user.uid, myClassCollection);
     return _loading
         ? Loader()
         : Scaffold(

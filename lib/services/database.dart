@@ -1,20 +1,22 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import '../constants/firebase_api.dart';
 import '../models/error.dart';
 
-class MyClassDatabase {
+class ClassDatabase {
   final CollectionReference teacher;
   final String uid;
   File? file;
 
-  MyClassDatabase(this.uid, this.teacher);
+  ClassDatabase(this.uid, this.teacher);
   Future createClass(subjectName, batch, professorName, email, err, code) async {
     FirebaseFirestore.instance
         .collection('allClasses')
@@ -197,4 +199,6 @@ class PostAssignment {
       'dueDate + teacher copy': dueDate.toString()
     });
   }
+
+
 }

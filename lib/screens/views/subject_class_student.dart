@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tweetup_fyp/screens/views/submit_view_classwork.dart';
 import 'package:tweetup_fyp/screens/views/upcoming_classes_student.dart';
-
 import 'class_announcements.dart';
 
 class SubjectClassStudent extends StatefulWidget {
@@ -24,6 +24,7 @@ class _SubjectClassStudentState extends State<SubjectClassStudent> {
     ];
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           classData['Name'].toString(),
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -32,32 +33,43 @@ class _SubjectClassStudentState extends State<SubjectClassStudent> {
         backgroundColor: Colors.white,
       ),
       body: tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Theme.of(context).primaryColor,
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.stream,
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          indicatorColor: Colors.blue.shade50,
+          labelTextStyle: MaterialStateProperty.all(
+              const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)
+          ),
+        ),
+        child: NavigationBar(
+          height: 60,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          selectedIndex: _currentIndex,
+          animationDuration: const Duration(seconds: 3),
+          onDestinationSelected: (index)=>{
+            setState((){
+              _currentIndex = index;
+            })
+          },
+          backgroundColor: Colors.blue.shade100,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.announcement_outlined),
+                label: 'asseveration',
+                selectedIcon: Icon(Icons.announcement_outlined ),
               ),
-              label: 'announcement'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.class_rounded,
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.rectangle_grid_2x2),
+                selectedIcon: Icon(CupertinoIcons.rectangle_grid_2x2,
+                  color:  Color(0xFF223263),),
+                label: 'Classwork',
               ),
-              label: 'classwork'),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.meeting_room,
+              NavigationDestination(
+                icon: Icon(Icons.upcoming_outlined),
+                selectedIcon: Icon(Icons.upcoming_outlined),
+                label: 'Up Coming',
               ),
-              label: 'upcoming lectures'),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+            ],
+        ),
       ),
     );
   }

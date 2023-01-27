@@ -51,7 +51,7 @@ class _homestuState extends State<HomeStudent> {
             icon: const Icon(Icons.logout),
           )
         ],
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(name!,
           style: const TextStyle(color: Colors.white),

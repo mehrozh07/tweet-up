@@ -11,7 +11,7 @@ import '../../widgets/formFields.dart';
 
 class Notes extends StatefulWidget {
   String code;
-  Notes(this.code);
+  Notes(this.code, {super.key});
 
   @override
   _NotesState createState() => _NotesState();
@@ -114,45 +114,45 @@ await reference.putFile(pdfFile);
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    TextButton.icon(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(color: Colors.blue),
-                        backgroundColor: Colors.white30,
-                        shape:RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                      onPressed: () => {
-                        selectFile(),
-                        debugPrint('attach file button pressed'),
-                      },
-                      icon: const Icon(Icons.attach_file_rounded,),
-                      label: const Text('attach file',),
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text(fileName,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),),
-                    TextButton.icon(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(color: Colors.blue),
-                        backgroundColor: Colors.white30,
-                        shape:RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                      ),
-                      onPressed: () => {
-                        uploadFile()
-                            .whenComplete(() => {
-                          uploadpdf(file!),
-                        }),
-                        debugPrint('upload button pressed'),
-                      },
-                      icon: const Icon(Icons.cloud_upload,),
-                      label: const Text('upload file',),
-                    ),
-                    uploadTask != null ? buildUploadStatus(uploadTask!) : Container(),
+                    // TextButton.icon(
+                    //   style: TextButton.styleFrom(
+                    //     textStyle: const TextStyle(color: Colors.blue),
+                    //     backgroundColor: Colors.white30,
+                    //     shape:RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(24.0),
+                    //     ),
+                    //   ),
+                    //   onPressed: () => {
+                    //     selectFile(),
+                    //     debugPrint('attach file button pressed'),
+                    //   },
+                    //   icon: const Icon(Icons.attach_file_rounded,),
+                    //   label: const Text('attach file',),
+                    // ),
+                    // SizedBox(height: height*0.01,),
+                    // Text(fileName,
+                    // style: const TextStyle(
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.bold),),
+                    // TextButton.icon(
+                    //   style: TextButton.styleFrom(
+                    //     textStyle: const TextStyle(color: Colors.blue),
+                    //     backgroundColor: Colors.white30,
+                    //     shape:RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(24.0),
+                    //     ),
+                    //   ),
+                    //   onPressed: () => {
+                    //     uploadFile()
+                    //         .whenComplete(() => {
+                    //       uploadpdf(file!),
+                    //     }),
+                    //     debugPrint('upload button pressed'),
+                    //   },
+                    //   icon: const Icon(Icons.cloud_upload,),
+                    //   label: const Text('upload file',),
+                    // ),
+                    // uploadTask != null ? buildUploadStatus(uploadTask!) : Container(),
                     formField(url, 'Link of file', context),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -190,7 +190,7 @@ await reference.putFile(pdfFile);
                             child: Container(
                                 padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(color: Colors.white)),
                                 alignment: Alignment.center,

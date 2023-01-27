@@ -338,9 +338,9 @@ class UserInfo extends StatelessWidget {
             )
           ],
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 28),
-          child: const Divider(),
+          child: Divider(),
         ),
       ],
     );

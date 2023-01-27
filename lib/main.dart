@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:tweetup_fyp/screens/authenticate/login.dart';
@@ -17,6 +19,12 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+Future<void> _firebaseBackgroundMessageHandler(RemoteMessage message) async{
+  if (kDebugMode) {
+    print(".................Handle background messages ${message.messageId}");
+  }
+}
+
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -33,6 +41,8 @@ Future<void> main() async {
       SystemUiMode.manual, overlays: []);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessageHandler);
   runApp(Phoenix(child: MyApp()));
 }
 

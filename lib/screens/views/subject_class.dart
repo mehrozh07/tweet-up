@@ -77,7 +77,8 @@ class _SubjectClassState extends State<SubjectClass> {
                 selectedIcon: Icon(Icons.upcoming_outlined),
                 label: 'Up Coming',
               ),
-            ]),
+            ]
+        ),
       ),
     );
   }

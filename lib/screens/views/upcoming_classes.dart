@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tweetup_fyp/screens/views/scheduled_classes.dart';
-
+import 'package:tweetup_fyp/services/database.dart';
+import 'package:tweetup_fyp/services/firestore_service.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import '../../models/error.dart';
-import '../../services/database.dart';
 import '../../services/loading.dart';
 import '../../widgets/formFields.dart';
 
@@ -53,14 +57,38 @@ class _UpcomingClassesState extends State<UpcomingClasses> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final topics = TextEditingController();
+  String mToken = 'ok';
+  FirestoreService firestoreService = FirestoreService();
+  void getToken() async{
+    await FirebaseMessaging.instance.getToken().then((token){
+      if(token!.isNotEmpty){
+        setState(() {
+          mToken = token;
+          firestoreService.saveToke(token);
+          if (kDebugMode) {
+            print("my Device Toke$token");
+          }
+        });
+      }
+    });
+  }
+  @override
+  void initState() {
+    FirestoreService.requestPermission(context);
+    getToken();
+    FirestoreService.initInfo(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    var imgURL;
+    if (kDebugMode) {
+      print(mToken);
+    }
+    String imgURL;
     if (user == null) {
-      imgURL =
-          'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
+      imgURL = 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
     } else {
       imgURL = user.photoURL ?? 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
     }
@@ -69,8 +97,7 @@ class _UpcomingClassesState extends State<UpcomingClasses> {
         : Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height -
-                    kBottomNavigationBarHeight -
+                height: MediaQuery.of(context).size.height - kBottomNavigationBarHeight -
                     AppBar().preferredSize.height,
                 child: Column(
                   children: [
@@ -135,12 +162,25 @@ class _UpcomingClassesState extends State<UpcomingClasses> {
                                               topics: topics.text,
                                               url: url.text);
                                           await db.scheduleClass();
+                                          DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').
+                                          doc(user.email).get();
                                           setState(() {
-                                            url.text = '';
-                                            topics.text = '';
+                                            String token = snapshot['token'];
+                                            FirestoreService.sendPushNotification(
+                                              title: url.text.toString(),
+                                              body: topics.text.toString(),
+                                              token: token,
+                                            );
+                                          });
+                                          setState(() {
+                                            url.clear();
+                                            topics.clear();
                                             _loading = false;
                                             msg = error.error;
                                           });
+
+                                        }else{
+                                          Utils.snackBar(message: "scheduled class cant be empty", context: context, color: Colors.redAccent);
                                         }
                                       },
                                       child: const Text(

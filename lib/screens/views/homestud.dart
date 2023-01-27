@@ -77,12 +77,12 @@ class _homestudState extends State<homestud> {
             icon: const Icon(Icons.logout),
           )
         ],
-        iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.white,
         title: Text(
           'Classroom Application Flipr Hackathon X',
           //name,
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
       ),
       body: SingleChildScrollView(
