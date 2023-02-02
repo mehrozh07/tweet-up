@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tweetup_fyp/screens/authenticate/login.dart';
 import 'package:tweetup_fyp/screens/views/role.dart';
 import 'package:tweetup_fyp/services/drawer.dart';
+import 'package:tweetup_fyp/services/firestore_service.dart';
 import 'package:tweetup_fyp/util/utils.dart';
 import '../../constants/constants.dart';
 import 'create_class.dart';
@@ -20,7 +21,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirestoreService firestoreService = FirestoreService();
+  @override
+  void initState() {
+    firestoreService.startMeeting(context);
+    // TODO: implement initState
+    super.initState();
+  }
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -67,7 +74,8 @@ class _HomeState extends State<Home> {
               child: UserInfo(imgURL: imgURL, user: user),
             ),
             Text(
-              'Teacher\'s section',textAlign: TextAlign.start,
+              'Teacher\'s section',
+              textAlign: TextAlign.start,
               style: kPageTitleStyleBlack,
             ),
             SizedBox(height: MediaQuery.of(context).size.height*0.1,),
@@ -193,11 +201,15 @@ class _UserInfoState extends State<UserInfo> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Text('${widget.user?.displayName}', textAlign: TextAlign.start, style:
+                  Text('${widget.user?.displayName}',
+                      textAlign: TextAlign.start, style:
                           GoogleFonts.alegreya(fontWeight: FontWeight.bold, fontSize: 30, fontStyle: FontStyle.italic)),
                   // SizedBox(height: 2.h,),
-                  Text('${widget.user?.email}', style:
-                  GoogleFonts.questrial(fontWeight: FontWeight.bold)),
+                  Text('${widget.user?.email}',
+                      style:TextStyle(
+                          fontWeight: FontWeight.bold,
+                      )
+                  ),
                 ],
                 ),
               )
@@ -236,7 +248,9 @@ class _UserInfoState extends State<UserInfo> {
         Positioned(
           right: -45,
           top: -40,
-          child: IconButton(onPressed: (){},  icon: const Icon(Icons.logout, color: Colors.black,))
+          child: IconButton(onPressed: (){
+
+          },  icon: const Icon(Icons.logout, color: Colors.black,))
         ),
         Positioned(
           right: -45,

@@ -85,8 +85,17 @@ class MyApp extends StatelessWidget {
                   primarySwatch: MaterialColor(0xff02487c, color),
                   fontFamily: 'Montserrat',
                   textTheme: const TextTheme(
-                    displayLarge:
-                    TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+                    bodyLarge: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    bodyMedium: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    displayLarge: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
               ),
               home: FirebaseAuth.instance.currentUser == null ? const LoginScreen() : const Home(),

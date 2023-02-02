@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tweetup_fyp/screens/views/join_meetings.dart';
+import 'package:tweetup_fyp/services/firestore_service.dart';
 
 class Role extends StatefulWidget {
   static const routeName = '/role';
@@ -14,6 +17,9 @@ class Role extends StatefulWidget {
 }
 
 class _roleState extends State<Role> {
+  var firebaseService = FirestoreService();
+  var meetingIdController = TextEditingController();
+  var meetingPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +79,12 @@ class _roleState extends State<Role> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      const ListTile(
-                                        title: Text('Start instant meeting'),
-                                        leading: Icon(Icons.video_call),
+                                       ListTile(
+                                         onTap: (){
+                                           firebaseService.startMeeting(context);
+                                         },
+                                        title: const Text('Start instant meeting'),
+                                        leading: const Icon(Icons.video_call),
                                       ),
                                       const ListTile(
                                         title: Text('Scheduled class'),
@@ -111,7 +120,7 @@ class _roleState extends State<Role> {
                         ),
                       ),
                       onPressed: (){
-
+                        Navigator.push(context, CupertinoPageRoute(builder: (context)=> JoinMeetings()));
                       },
                       child: Text('Join with a code',
                         style: GoogleFonts.poppins(

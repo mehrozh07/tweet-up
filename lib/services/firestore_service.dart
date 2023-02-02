@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_zoom_sdk/zoom_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tweetup_fyp/services/token_model.dart';
 import 'package:tweetup_fyp/services/user_model.dart';
 import '../util/utils.dart';
+import 'package:flutter_zoom_sdk/zoom_options.dart';
 import 'message_model.dart';
 
 class FirestoreService {
@@ -238,4 +240,116 @@ class FirestoreService {
       // Utils.snackBar(message: e.toString(), context: context, color: Colors.redAccent);
     }
  }
+
+ joinMeeting(context,String? meetingIdController, String? passwordController, nameId) async{
+   bool isMeetingEnded(String status) {
+     var result = false;
+     if (Platform.isAndroid) {
+       result = status == "MEETING_STATUS_DISCONNECTING" || status == "MEETING_STATUS_FAILED";
+     } else {
+       result = status == "MEETING_STATUS_IDLE";
+     }
+     return result;
+   }
+   if(meetingIdController!.isNotEmpty && passwordController!.isNotEmpty){
+     ZoomOptions zoomOptions =  ZoomOptions(
+       domain: 'zoom.us',
+       appKey: "TiYuaGgEEOMkTUclfr33bs3wv6GJZHXc2Fos",
+       appSecret: "LWSK90GW8nz29NueCQ8qCWbCyzJiYaKroXAX",
+     );
+     var meetingOptions =  ZoomMeetingOptions(
+         userId: nameId, //pass username for join meeting only --- Any name eg:- EVILRATT.
+         meetingId: meetingIdController, //pass meeting id for join meeting only
+         meetingPassword: passwordController, //pass meeting password for join meeting only
+         disableDialIn: "true",
+         disableDrive: "true",
+         disableInvite: "true",
+         disableShare: "true",
+         disableTitlebar: "false",
+         viewOptions: "true",
+         noAudio: "false",
+         noDisconnectAudio: "false"
+     );
+     var zoom = ZoomView();
+     zoom.initZoom(zoomOptions).then((value){
+       if(value[0] == 0){
+         zoom.onMeetingStatus().listen((event) {
+           if (isMeetingEnded(event[0])) {
+             if (kDebugMode) {
+               print("[Meeting Status] :- Ended");
+             }
+             Timer.periodic(const Duration(seconds: 0), (timer) { });
+           }
+         });
+         zoom.joinMeeting(meetingOptions).then((joinMeetingResult){
+           Timer.periodic(const Duration(seconds: 1), (timer) {
+             zoom.meetingStatus(meetingOptions.meetingId!).then((value){
+               if (kDebugMode) {
+                 print("${"[Meeting Status Polling] : " + value[0]} - " + value[1]);
+               }
+             });
+           });
+         });
+       }
+     }).catchError((error){print(error.toString());
+     });
+   }else{
+     ScaffoldMessenger.of(context).showSnackBar(
+         const SnackBar(
+       content: Text("Enter a meeting password to start."),
+     ));
+   }
+ }
+  startMeeting(context, ) {
+    bool _isMeetingEnded(String status) {
+      var result = false;
+
+      if (Platform.isAndroid)
+        result = status == "MEETING_STATUS_DISCONNECTING" || status == "MEETING_STATUS_FAILED";
+      else
+        result = status == "MEETING_STATUS_IDLE";
+
+      return result;
+    }
+    ZoomOptions zoomOptions = ZoomOptions(
+      domain: 'zoom.us',
+      appKey: "TiYuaGgEEOMkTUclfr33bs3wv6GJZHXc2Fos",
+      appSecret: "LWSK90GW8nz29NueCQ8qCWbCyzJiYaKroXAX",//API SECRET FROM ZOOM - Sdk API Secret
+    );
+    var meetingOptions =  ZoomMeetingOptions(
+        userId: 'asliscammer420@gmail.com', //pass host email for zoom
+        userPassword: 'mehrozhassan', //pass host password for zoom
+        disableDialIn: "false",
+        disableDrive: "false",
+        disableInvite: "false",
+        disableShare: "false",
+        disableTitlebar: "false",
+        viewOptions: "false",
+        noAudio: "false",
+        noDisconnectAudio: "false"
+    );
+
+    var zoom = ZoomView();
+    zoom.initZoom(zoomOptions).then((results){
+      if(results[0] == 0){
+        zoom.onMeetingStatus().listen((event) {
+          zoom.startMeeting(meetingOptions).then((loginResult) {
+            print("${"[LoginResult] :- " + loginResult[0]} - " + loginResult[1]);
+            if(loginResult[0] == "SDK ERROR"){
+              //SDK INIT FAILED
+              print((loginResult[1]).toString());
+            }else if(loginResult[0] == "LOGIN ERROR"){
+              //LOGIN FAILED - WITH ERROR CODES
+              print((loginResult[1]).toString());
+            }else{
+              //LOGIN SUCCESS & MEETING STARTED - WITH SUCCESS CODE 200
+              print((loginResult[0]).toString());
+            }
+          });
+        }
+
+        );
+      }
+    });
+  }
 }

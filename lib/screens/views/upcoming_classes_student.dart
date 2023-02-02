@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UpcomingClassesStudent extends StatefulWidget {
   Map<dynamic, dynamic> classData;
-  UpcomingClassesStudent(this.classData);
+  UpcomingClassesStudent(this.classData, {super.key});
 
   @override
   _UpcomingClassesStudentState createState() => _UpcomingClassesStudentState();
@@ -42,7 +42,6 @@ class _UpcomingClassesStudentState extends State<UpcomingClassesStudent> {
                       print(lectureData.data());
                       final url = TextEditingController();
                       url.text = lectureData['url'];
-
                       return Card(
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -73,7 +72,7 @@ class _UpcomingClassesStudentState extends State<UpcomingClassesStudent> {
                                   backgroundColor: Colors.amber,
                                 ),
                                 onPressed: () async {
-                                  if (await canLaunch(url.text)) {
+                                  if (await launch(url.text)) {
                                     launch(url.text);
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,9 @@ class _JoinClassState extends State<JoinClass> {
       setState(() {
         exists = true;
       });
-      print('exists');
+      if (kDebugMode) {
+        print('exists');
+      }
     }
   }
 
@@ -54,13 +57,6 @@ class _JoinClassState extends State<JoinClass> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    var imgURL;
-    if (user == null) {
-      imgURL =
-          'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
-    } else {
-      imgURL = user.photoURL ?? 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
-    }
     name.text = user.displayName!;
     return _loading
         ? Loader()
@@ -68,9 +64,9 @@ class _JoinClassState extends State<JoinClass> {
             appBar: AppBar(
               title: Text(
                 'Join a class',
-                style: TextStyle(color: Theme.of(context).accentColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
-              iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+              iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
               backgroundColor: Colors.white,
             ),
             body: SingleChildScrollView(
@@ -103,7 +99,9 @@ class _JoinClassState extends State<JoinClass> {
                                     if (_formKey.currentState!.validate()) {
                                       await checkExistence();
                                       if (exists) {
-                                        print(exists);
+                                        if (kDebugMode) {
+                                          print(exists);
+                                        }
                                         setState(() {
                                           _loading = true;
                                         });
@@ -124,7 +122,8 @@ class _JoinClassState extends State<JoinClass> {
                                             teacherId,
                                             name.text,
                                             user.email!,
-                                            error);
+                                            error,
+                                        );
                                         await db.joinClass();
                                         setState(() {
                                           _loading = false;

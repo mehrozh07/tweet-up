@@ -13,10 +13,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
-  firebase_auth: ^4.1.5
-  cloud_firestore: ^4.1.0
-  firebase_core: ^2.3.0
-  google_sign_in: ^5.4.2
+  firebase_auth: ^4.2.5
+  cloud_firestore: ^4.3.1
+  firebase_core: ^2.4.1
+  google_sign_in: ^5.4.4
   provider: ^6.0.4
   google_fonts: ^3.0.1
   flutter_phoenix: ^1.1.0
@@ -38,6 +38,7 @@ dependencies:
   another_flushbar: ^1.12.29
   flutter_native_splash: ^2.2.16
   flutter_bloc: ^8.1.1
+  flutter_zoom_sdk: ^1.1.0+4
 
 dev_dependencies:
   flutter_test:
