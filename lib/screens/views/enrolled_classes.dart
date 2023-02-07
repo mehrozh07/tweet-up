@@ -33,8 +33,6 @@ class EnrolledClasses extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     var colorIndex = -1;
-    final String collName =
-        'student ' "${ModalRoute.of(context)?.settings.arguments}";
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -45,7 +43,7 @@ class EnrolledClasses extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection(collName).snapshots(),
+          stream: FirebaseFirestore.instance.collection("student ${FirebaseAuth.instance.currentUser?.email}").snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -59,6 +57,7 @@ class EnrolledClasses extends StatelessWidget {
               print(snapshot.data?.docs);
             }
             return ListView(
+
                 children: snapshot.data!.docs.map((DocumentSnapshot document) {
               colorIndex += 1;
               return Card(
@@ -188,7 +187,8 @@ class EnrolledClasses extends StatelessWidget {
               );
             }).toList());
           },
-        ));
+        ),
+    );
   }
 }
 

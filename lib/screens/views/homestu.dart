@@ -1,19 +1,17 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:tweetup_fyp/screens/authenticate/login.dart';
+import 'package:tweetup_fyp/screens/views/subject_class_student.dart';
 import '../../constants/constants.dart';
-import '../../util/utils.dart';
+import '../authenticate/login.dart';
 import 'enrolled_classes.dart';
 import 'join_class.dart';
 
 class HomeStudent extends StatefulWidget {
   static const routeName = '/homestu';
-
   const HomeStudent({Key? key}) : super(key: key);
 
   @override
@@ -28,12 +26,9 @@ class _homestuState extends State<HomeStudent> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     var width = MediaQuery.of(context).size.width;
-    var imgURL;
-    if (user == null) {
-      imgURL =
-          'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
-    } else {imgURL = user.photoURL ?? 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';}
     var height = MediaQuery.of(context).size.height - AppBar().preferredSize.height;
+    final String collName =
+        'student ' "${ModalRoute.of(context)?.settings.arguments}";
     return Scaffold(
       backgroundColor: const Color(0xffE5E5E5),
       body: SingleChildScrollView(
@@ -42,7 +37,7 @@ class _homestuState extends State<HomeStudent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              UserInfo(imgURL: imgURL, user: user!),
+              UserInfo(user: user!),
               SizedBox(height: height*0.03),
               Text(
                 "UpComing Classes",
@@ -122,41 +117,93 @@ class _homestuState extends State<HomeStudent> {
                       textStyle: const TextStyle(fontSize: 16,color: Colors.black87, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text(
-                    "See All",
-                    style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 16,color: Colors.black87, fontWeight: FontWeight.bold),
+                  TextButton(
+                    onPressed: (){
+                      Navigator.of(context).pushNamed(
+                          EnrolledClasses.routeName,
+                          arguments: user.email);
+                    },
+                   child: Text( "See All",
+                     style: GoogleFonts.poppins(
+                       textStyle: const TextStyle(fontSize: 16,color: Colors.black87, fontWeight: FontWeight.bold),),
                     ),
                   ),
                 ],
               ),
-
-              ListView.builder(
-                shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: 6,
-                  itemBuilder: (context, snapshot){
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    leading: Container(
-                      height: MediaQuery.of(context).size.height*0.22,
-                      width:  width*0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          border:
-                          Border.all(color: Colors.transparent),
-                          image: DecorationImage(
-                              image: NetworkImage(image),
-                              fit: BoxFit.fill)),
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.black87),
-                    title: const Text("Languages",style: TextStyle(color: Colors.black87,fontSize: 17, fontWeight: FontWeight.bold),),
-                    subtitle: const Text('Class 3',style: TextStyle(color: Colors.black54,fontSize: 16, fontWeight: FontWeight.bold),),
-                  ),
-                );
-              }),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("student ${FirebaseAuth.instance.currentUser?.email}")
+                    .snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text('Something went wrong');
+                  }
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text("Loading...."),
+                    );
+                  }
+                  return ListView(
+                    shrinkWrap: true,
+                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        onTap: (){
+                          Navigator.of(context).pushNamed(
+                              SubjectClassStudent.routeName,
+                              arguments: document.data()
+                          );
+                        },
+                        visualDensity: const VisualDensity(horizontal: -4),
+                        contentPadding: EdgeInsets.zero,
+                        leading: Container(
+                          height: MediaQuery.of(context).size.height*0.22,
+                          width:  width*0.22,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              border:
+                              Border.all(color: Colors.transparent),
+                              image: DecorationImage(
+                                  image: NetworkImage(image),
+                                  fit: BoxFit.fill)),
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.black87),
+                        title: Text("${document['Name']}",
+                          style: const TextStyle(color: Colors.black87,fontSize: 17, fontWeight: FontWeight.bold),),
+                        subtitle: const Text('Class 3',style: TextStyle(color: Colors.black54,fontSize: 16, fontWeight: FontWeight.bold),),
+                      ),
+                    );
+                  }).toList());
+                },
+              ),
+              // ListView.builder(
+              //   shrinkWrap: true,
+              //     physics: const BouncingScrollPhysics(),
+              //     itemCount: 6,
+              //     itemBuilder: (context, snapshot){
+              //   return Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: ListTile(
+              //       leading: Container(
+              //         height: MediaQuery.of(context).size.height*0.22,
+              //         width:  width*0.22,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(8),
+              //             color: Colors.white,
+              //             border:
+              //             Border.all(color: Colors.transparent),
+              //             image: DecorationImage(
+              //                 image: NetworkImage(image),
+              //                 fit: BoxFit.fill)),
+              //       ),
+              //       trailing: const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.black87),
+              //       title: const Text("Languages",style: TextStyle(color: Colors.black87,fontSize: 17, fontWeight: FontWeight.bold),),
+              //       subtitle: const Text('Class 3',style: TextStyle(color: Colors.black54,fontSize: 16, fontWeight: FontWeight.bold),),
+              //     ),
+              //   );
+              // }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -242,12 +289,10 @@ class _homestuState extends State<HomeStudent> {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({
-    required this.imgURL,
+  const UserInfo({super.key,
     required this.user,
   });
 
-  final imgURL;
   final User user;
 
   @override
@@ -277,7 +322,11 @@ class UserInfo extends StatelessWidget {
               CircleAvatar(
                 maxRadius: 50,
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(imgURL),
+                child: Text("${user.displayName?.substring(0,1)}",
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),),
               ),
               const SizedBox(
                 width: 10,
@@ -288,12 +337,22 @@ class UserInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.displayName!,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.alegreya(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic)),
+                    Row(
+                      children: [
+                        Text(user.displayName!,
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.alegreya(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                fontStyle: FontStyle.italic)),
+                        IconButton(onPressed: (){
+                          FirebaseAuth.instance.signOut().then((value){
+                            Navigator.pushReplacementNamed(context, LoginScreen.id);
+                          });
+                        },
+                            icon: const Icon(Icons.logout, color: Colors.white))
+                      ],
+                    ),
                     // SizedBox(height: 2.h,),
                     Text(user.email!,
                         style: GoogleFonts.questrial(
@@ -318,40 +377,6 @@ class UserInfo extends StatelessWidget {
                 )),
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: [
-        //     Padding(
-        //       padding:
-        //           const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
-        //       child: Container(
-        //           width: 50.0,
-        //           height: 50.0,
-        //           decoration:  BoxDecoration(
-        //               shape: BoxShape.circle,
-        //               image:  DecorationImage(
-        //                   fit: BoxFit.fill, image:  NetworkImage(imgURL)))),
-        //     ),
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(vertical: 5),
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Text(user!.displayName!,
-        //               style:
-        //                   GoogleFonts.questrial(fontWeight: FontWeight.bold)),
-        //           Text(user!.email!,
-        //               style:
-        //                   GoogleFonts.questrial(fontWeight: FontWeight.w100)),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 28),
-        //   child: Divider(),
-        // ),
       ],
     );
   }

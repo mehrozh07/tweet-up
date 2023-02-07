@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tweetup_fyp/generated/assets.dart';
 import 'package:tweetup_fyp/screens/authenticate/sign_up.dart';
-import 'package:tweetup_fyp/screens/views/home.dart';
 import 'package:tweetup_fyp/screens/views/role.dart';
 import '../../services/auth.dart';
 import '../../widgets/flush_bar.dart';
@@ -83,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 4, right: 5, top: 0, bottom: 0),
+                contentPadding: const EdgeInsets.only(left: 4, right: 5,),
                 prefixIcon: Icon(
                   Icons.email_outlined,
                   color: Theme.of(context).primaryColor,
@@ -227,7 +226,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   _loading = false;
                 }
               },
-              child: const Text('Login'),
+              child: _loading ? Center(
+                  child: Transform.scale(
+                    scale: 0.5,
+                    child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 3,
+              ),
+                  ))
+                  : const Text('Login'),
             ),
             SizedBox(height: height*0.04,),
             Row(
