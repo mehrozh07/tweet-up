@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tweetup_fyp/screens/views/subject_class_student.dart';
-import '../../constants/constants.dart';
 import '../authenticate/login.dart';
 import 'enrolled_classes.dart';
 import 'join_class.dart';
@@ -27,10 +26,17 @@ class _homestuState extends State<HomeStudent> {
     final user = Provider.of<User?>(context);
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height - AppBar().preferredSize.height;
-    final String collName =
-        'student ' "${ModalRoute.of(context)?.settings.arguments}";
     return Scaffold(
       backgroundColor: const Color(0xffE5E5E5),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context).pushNamed(JoinClass.routeName);
+        },
+        label: const Text('Join',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        icon: const Icon(CupertinoIcons.add),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -177,108 +183,6 @@ class _homestuState extends State<HomeStudent> {
                     );
                   }).toList());
                 },
-              ),
-              // ListView.builder(
-              //   shrinkWrap: true,
-              //     physics: const BouncingScrollPhysics(),
-              //     itemCount: 6,
-              //     itemBuilder: (context, snapshot){
-              //   return Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: ListTile(
-              //       leading: Container(
-              //         height: MediaQuery.of(context).size.height*0.22,
-              //         width:  width*0.22,
-              //         decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(8),
-              //             color: Colors.white,
-              //             border:
-              //             Border.all(color: Colors.transparent),
-              //             image: DecorationImage(
-              //                 image: NetworkImage(image),
-              //                 fit: BoxFit.fill)),
-              //       ),
-              //       trailing: const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.black87),
-              //       title: const Text("Languages",style: TextStyle(color: Colors.black87,fontSize: 17, fontWeight: FontWeight.bold),),
-              //       subtitle: const Text('Class 3',style: TextStyle(color: Colors.black54,fontSize: 16, fontWeight: FontWeight.bold),),
-              //     ),
-              //   );
-              // }),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(JoinClass.routeName);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 180,
-                          width: MediaQuery.of(context).size.width / 2.3,
-                          padding: const EdgeInsets.symmetric(vertical: 40),
-                          decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 25.0, // soften the shadow
-                                  spreadRadius: 5.0, //extend the shadow
-                                  offset: Offset(
-                                    15.0, // Move to right 10  horizontally
-                                    15.0, // Move to bottom 10 Vertically
-                                  ),
-                                )
-                              ],
-                              color: Color.fromRGBO(60, 145, 230, 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Text(
-                            'Join New Class',
-                            textAlign: TextAlign.center,
-                            style: kPageTitleStyle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(EnrolledClasses.routeName,
-                            arguments: user.email);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(30),
-                          height: 180,
-                          width: MediaQuery.of(context).size.width / 2.3,
-                          decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 25.0, // soften the shadow
-                                  spreadRadius: 5.0, //extend the shadow
-                                  offset: Offset(
-                                    15.0, // Move to right 10  horizontally
-                                    15.0, // Move to bottom 10 Vertically
-                                  ),
-                                )
-                              ],
-                              color: Colors.pinkAccent,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Text(
-                            'View classes',
-                            textAlign: TextAlign.center,
-                            style: kPageTitleStyle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
               ),
             ],
           ),

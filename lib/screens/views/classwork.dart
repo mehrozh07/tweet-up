@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,6 @@ class _ClassworkState extends State<Classwork>
                         if (kDebugMode) {
                           print(announcementData.data());
                         }
-
                         return Card(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -147,21 +147,18 @@ class _ClassworkState extends State<Classwork>
                                   ],
                                 ),
                                 TextButton(
-                                  child: const Text('Open Assignment'),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.lightGreen,
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    visualDensity: const VisualDensity(horizontal: 3),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
                                   onPressed: () async {
-                                    if (await canLaunch(
-                                        announcementData['url'])) {
-                                      launch(announcementData['url']);
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                          backgroundColor:
-                                              Color.fromRGBO(219, 22, 47, 1),
-                                          content: Text(
-                                              "Can't open the provided link",
-                                              style: TextStyle(
-                                                  color: Colors.white))));
-                                    }
+
                                   },
+                                  child: const Icon(CupertinoIcons.cloud_download, color: Colors.white),
                                 ),
                                 // Text('123')
                               ],
@@ -175,13 +172,6 @@ class _ClassworkState extends State<Classwork>
       ),
     ];
     final user = Provider.of<User>(context);
-    String imgURL;
-    if (user == null) {
-      imgURL =
-          'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
-    } else {
-      imgURL = user.photoURL ?? 'https://cdn3.iconfinder.com/data/icons/user-interface-web-1/550/web-circle-circular-round_54-512.png';
-    }
     return Scaffold(
       floatingActionButton: SpeedDial(
         childMargin: const EdgeInsets.only(right: 18, bottom: 10),
@@ -199,7 +189,7 @@ class _ClassworkState extends State<Classwork>
         shape: const CircleBorder(),
         children: [
           SpeedDialChild(
-              child: Icon(Icons.notes),
+              child: const Icon(Icons.notes),
               backgroundColor: Colors.red,
               label: 'Upload Notes',
               labelStyle: const TextStyle(fontSize: 18.0),
@@ -281,68 +271,6 @@ class _ClassworkState extends State<Classwork>
           ],
         ),
       ),
-    );
-  }
-}
-
-class UserInfo extends StatelessWidget {
-  const UserInfo({super.key,
-    required this.imgURL,
-    required this.user,
-    required this.classData,
-  }) ;
-
-  final imgURL;
-  final User? user;
-  final Map? classData;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
-          child: Text(
-            'You are currently signed in as..',
-            style: GoogleFonts.roboto(),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
-              child: Container(
-                  width: 50.0,
-                  height: 50.0,
-                  decoration:  BoxDecoration(
-                      shape: BoxShape.circle,
-                      image:  DecorationImage(
-                          fit: BoxFit.fill, image:  NetworkImage(imgURL)))),
-            ),
-            Padding(
-              padding:  const EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(user!.displayName!,
-                      style:
-                          GoogleFonts.questrial(fontWeight: FontWeight.bold)),
-                  Text(user!.email!,
-                      style:
-                          GoogleFonts.questrial(fontWeight: FontWeight.w100)),
-                ],
-              ),
-            )
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 28),
-          child: Divider(),
-        ),
-      ],
     );
   }
 }

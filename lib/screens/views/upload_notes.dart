@@ -5,6 +5,7 @@ import 'package:path/path.dart' as Path;
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tweetup_fyp/constants/firebase_api.dart';
+import 'package:tweetup_fyp/util/utils.dart';
 import '../../services/database.dart';
 import '../../services/loading.dart';
 import '../../widgets/formFields.dart';
@@ -81,9 +82,9 @@ debugPrint("Download-Link$urlFile");
     },
   );
 
-  Future uploadpdf(File pdfFile) async{
+  Future<String?> uploadNotes(File pdfFile) async{
     String url;
-  Reference reference = FirebaseStorage.instance.ref().child('/assignment_file');
+  Reference reference = FirebaseStorage.instance.ref().child('Notes_file');
 await reference.putFile(pdfFile);
  url =await reference.getDownloadURL();
  return url;
@@ -114,46 +115,46 @@ await reference.putFile(pdfFile);
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // TextButton.icon(
-                    //   style: TextButton.styleFrom(
-                    //     textStyle: const TextStyle(color: Colors.blue),
-                    //     backgroundColor: Colors.white30,
-                    //     shape:RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(24.0),
-                    //     ),
-                    //   ),
-                    //   onPressed: () => {
-                    //     selectFile(),
-                    //     debugPrint('attach file button pressed'),
-                    //   },
-                    //   icon: const Icon(Icons.attach_file_rounded,),
-                    //   label: const Text('attach file',),
-                    // ),
-                    // SizedBox(height: height*0.01,),
-                    // Text(fileName,
-                    // style: const TextStyle(
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.bold),),
-                    // TextButton.icon(
-                    //   style: TextButton.styleFrom(
-                    //     textStyle: const TextStyle(color: Colors.blue),
-                    //     backgroundColor: Colors.white30,
-                    //     shape:RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(24.0),
-                    //     ),
-                    //   ),
-                    //   onPressed: () => {
-                    //     uploadFile()
-                    //         .whenComplete(() => {
-                    //       uploadpdf(file!),
-                    //     }),
-                    //     debugPrint('upload button pressed'),
-                    //   },
-                    //   icon: const Icon(Icons.cloud_upload,),
-                    //   label: const Text('upload file',),
-                    // ),
-                    // uploadTask != null ? buildUploadStatus(uploadTask!) : Container(),
-                    formField(url, 'Link of file', context),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.blue),
+                        backgroundColor: Colors.white30,
+                        shape:RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () => {
+                        selectFile(),
+                        debugPrint('attach file button pressed'),
+                      },
+                      icon: const Icon(Icons.attach_file_rounded,),
+                      label: const Text('attach file',),
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Text(fileName,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.blue),
+                        backgroundColor: Colors.white30,
+                        shape:RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      onPressed: () => {
+                        uploadFile()
+                            .whenComplete(() => {
+                          Utils.snackBar(message: "loaded", context: context, color: Colors.black),
+                        }),
+                        debugPrint('upload button pressed'),
+                      },
+                      icon: const Icon(Icons.cloud_upload,),
+                      label: const Text('upload file',),
+                    ),
+                    uploadTask != null ? buildUploadStatus(uploadTask!) : Container(),
+                    // formField(url, 'Link of file', context),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -205,12 +206,17 @@ await reference.putFile(pdfFile);
                                 setState(() {
                                   loading = true;
                                 });
-                                var db = PostNotes(
-                                    widget.code, topic.text, url.text);
-                                await db.postNote();
+                                uploadNotes(file!).then((value) async {
+                                  var db = PostNotes(
+                                    widget.code,
+                                    topic.text,
+                                    value.toString(),
+                                  );
+                                  await db.postNote();
+                                });
+
                                 topic.text = '';
                                 url.text;
-
                                 FocusScope.of(context).unfocus();
                                 setState(() {
                                   msg = 'Notes are uploaded';
